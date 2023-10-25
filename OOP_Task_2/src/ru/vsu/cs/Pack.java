@@ -12,7 +12,11 @@ public class Pack {
         this.pack = getPack(numberOfCards);
     }
 
-    public List<Card> getPack(int n) {
+    public Card getCard(int index) {
+        return pack.get(index);
+    }
+
+    private List<Card> getPack(int n) {
         boolean jokers = false;
         int numberOfCards = n;
 
