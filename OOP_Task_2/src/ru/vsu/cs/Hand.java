@@ -1,40 +1,49 @@
 package ru.vsu.cs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Hand {
     private ArrayList<Card> hand = new ArrayList<>();
-    private int size = 0;
 
-    public Hand(int size) {
-        this.size = size;
-        this.hand = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            hand.add(null);
-        }
+    public Hand() {
+        this.hand = new ArrayList<>();
     }
 
     public int getSize() {
-        return size;
+        return hand.size();
     }
 
     public void add(Card card) {
-        Card lastCard = hand.get(getSize() - 1);
-        //добавление карт в руку
-        if (lastCard == null) {
-            hand.add(card);
-        } else {
-            System.err.println("Нельзя добавить больше " + getSize() + " карт!");
+        hand.add(card);
+    }
+
+    public void remove(Card card) {
+        hand.remove(card);
+    }
+    public void remove(List<Card> cards) {
+        for (Card card : cards) {
+            hand.remove(card);
         }
+    }
+
+    public void clear() {
+        this.hand.clear();
+    }
+
+    public Card getCard(int index) {
+        if (index <= hand.size()) {
+            return hand.get(index);
+        } else System.err.println("Выход за рамки массива!");
+        return null;
     }
 
     public boolean durakHandCheck() {
         boolean isNull = false;
-        Card lastCard = hand.get(getSize() - 1);
         //проверка на 5 карт одной масти
-        if (lastCard != null) {
+        if (hand.size() == 6) {
             int[] suits = new int[4];
-            for (int i = 0; i < getSize(); i++) {
+            for (int i = 0; i < 6; i++) {
                 String suit = hand.get(i).getSuit();
                 switch (suit) {
                     case "h" -> {
@@ -63,10 +72,6 @@ public class Hand {
                     }
                 }
                 if (isNull) {
-                    hand.clear();
-                    for (int j = 0; j < getSize(); j++) {
-                        hand.add(null);
-                    }
                     return false;
                 }
             }

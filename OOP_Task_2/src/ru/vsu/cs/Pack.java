@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Pack {
-    private List<Card> pack;
+    private List<Card> pack = new ArrayList<>();
     private final List<String> suit = Arrays.asList("h", "p", "d", "c");
 
     public Pack(int numberOfCards) {
