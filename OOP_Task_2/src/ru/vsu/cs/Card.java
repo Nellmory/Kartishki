@@ -38,6 +38,10 @@ public class Card {
     public void setState(CardState state) {
         this.state = state;
     }
+
+    public void setGameState(GameCardState gameState) {
+        this.gameState = gameState;
+    }
 }
 
 

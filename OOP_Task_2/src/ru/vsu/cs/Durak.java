@@ -35,14 +35,19 @@ public class Durak {
         dealCards(userHand);
         dealCards(enemyHand);
         //сформируем оставшуюся колоду и определим козырную масть
-        int k = 0;
-        while (k < 26) {
-            Card card = pack.getCard(rnd.nextInt(36));
+        List<Card> tmpList = new ArrayList<>();
+        for (int i = 0; i < 36; i++) {
+            Card card = pack.getCard(i);
             if (card.getState() == NOT_USED) {
-                gamingPack.push(card);
-                k++;
+                tmpList.add(card);
+                card.setState(USED);
             }
-            if (k == 1) {
+        }
+        Collections.shuffle(tmpList, rnd);
+        for (int i = 0; i < 24; i++) {
+            Card card = tmpList.get(i);
+            gamingPack.push(card);
+            if (i == 0) {
                 trumpSuit = card.getSuit();
             }
         }
@@ -104,6 +109,54 @@ public class Durak {
         return res;
     }
 
+    public List<Card> enemyDefence(List<Card> attack) {
+        List<Card> res = new ArrayList<>();
+        for (Card attackCard : attack) {
+            int minValue = 20;
+            int minTrampValue = 20;
+            Card resCard = null;
+            Card resTrampCard = null;
+            for (int j = 0; j < enemyHand.getSize() - res.size(); j++) {
+                Card card = enemyHand.getCard(j);
+                if (Objects.equals(attackCard.getSuit(), trumpSuit)) {
+                    if (Objects.equals(card.getSuit(), trumpSuit) && card.getValue() < minTrampValue && card.getValue() > attackCard.getValue()) {
+                        minTrampValue = card.getValue();
+                        resTrampCard = card;
+                    }
+
+                } else {
+                    if (Objects.equals(card.getSuit(), trumpSuit)) {
+                        if (card.getValue() < minTrampValue) {
+                            minTrampValue = card.getValue();
+                            resTrampCard = card;
+                        }
+                    } else {
+                        if (Objects.equals(card.getSuit(), attackCard.getSuit()) && card.getValue() < minValue && card.getValue() > attackCard.getValue()) {
+                            minValue = card.getValue();
+                            resCard = card;
+                        }
+                    }
+                }
+            }
+            if (resCard != null) {
+                res.add(resCard);
+                enemyHand.remove(resCard);
+            } else {
+                if (resTrampCard != null) {
+                    res.add(resTrampCard);
+                    enemyHand.remove(resTrampCard);
+                } else {
+                    //случай, когда нечем отбить (противник тянет карты)
+                    enemyHand.add(res);
+                    res.clear();
+                    pickUpCards(enemyHand, attack);
+                    return res;
+                }
+            }
+        }
+        return res;
+    }
+
     private void dealCards(Hand hand) {
         boolean ready = false;
         while (!ready) {
@@ -152,18 +205,51 @@ public class Durak {
         isUserTurn = true;
     }
 
-    public void finishTurn() {
-
+    public void finishTurn(boolean finishOfUserTurn) {
+        if (enemyMove.size() == userMove.size()) {
+            for (int i = 0; i < enemyMove.size(); i++) {
+                Card enemyCard = enemyMove.get(i);
+                Card userCard = userMove.get(i);
+                enemyCard.setGameState(Card.GameCardState.DISCARDED);
+                userCard.setGameState(Card.GameCardState.DISCARDED);
+            }
+            if (finishOfUserTurn) {
+                takeCards(userHand);
+                takeCards(enemyHand);
+            } else {
+                takeCards(enemyHand);
+                takeCards(userHand);
+            }
+        } else {
+            if (userMove.size() == 0) {
+                takeCards(enemyHand);
+            }
+            if (enemyMove.size() == 0) {
+                takeCards(userHand);
+            }
+        }
+        enemyMove.clear();
+        userMove.clear();
     }
 
     public void pickUpCards(Hand hand, List<Card> turn) {
         for (Card card : turn) {
             hand.add(card);
         }
-    }
-
-    public Card getCardFromGamingPack() {
-        return gamingPack.pop();
+        if (enemyMove.size() != 0 || userMove.size() != 0) {
+            for (Card card : enemyMove) {
+                hand.add(card);
+            }
+            for (Card card : userMove) {
+                hand.add(card);
+            }
+            if (hand == userHand) {
+                userMove.clear();
+            }
+            if (hand == enemyHand) {
+                enemyMove.clear();
+            }
+        }
     }
 
     public boolean ruleCheckForDefence(Card attackCard, Card defenceCard) {
@@ -172,6 +258,49 @@ public class Durak {
         } else {
             return !Objects.equals(defenceCard.getSuit(), trumpSuit);
         }
+    }
+
+    public boolean ruleCheckForThrowIn(Card attackCard, List<Card> attack) {
+        for (int i = 0; i < userMove.size(); i++) {
+            Card userPrevCard = userMove.get(i);
+            Card enemyPrevCard = enemyMove.get(i);
+            if (attackCard.getValue() == userPrevCard.getValue() || attackCard.getValue() == enemyPrevCard.getValue()) {
+                return false;
+            }
+        }
+        if (attack.size() != 0) {
+            for (int i = 0; i < attack.size(); i++) {
+                Card userPrevCard = attack.get(i);
+                if (attackCard.getValue() == userPrevCard.getValue()) {
+                    return false;
+                }
+            }
+        } else return false;
+        return true;
+    }
+
+    private void takeCards(Hand hand) {
+        if (hand == userHand) {
+            for (int i = 0; i < userMove.size(); i++) {
+                Card newCard = getCardFromGamingPack();
+                if (newCard != null && userHand.getSize() < 6) {
+                    userHand.add(newCard);
+                } else break;
+            }
+        } else {
+            for (int i = 0; i < enemyMove.size(); i++) {
+                Card newCard = getCardFromGamingPack();
+                if (newCard != null && enemyHand.getSize() < 6) {
+                    enemyHand.add(newCard);
+                } else break;
+            }
+        }
+    }
+
+    public Card getCardFromGamingPack() {
+        if (!gamingPack.empty()) {
+            return gamingPack.pop();
+        } else return null;
     }
 
     public void addInEnemyMoveList(List<Card> turn) {

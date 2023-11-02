@@ -18,9 +18,14 @@ public class Hand {
         hand.add(card);
     }
 
+    public void add(List<Card> cards) {
+        hand.addAll(cards);
+    }
+
     public void remove(Card card) {
         hand.remove(card);
     }
+
     public void remove(List<Card> cards) {
         for (Card card : cards) {
             hand.remove(card);

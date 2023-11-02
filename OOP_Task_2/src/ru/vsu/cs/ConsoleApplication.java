@@ -9,7 +9,7 @@ public class ConsoleApplication {
     private boolean throwInDurak = false;
     private boolean passingDurak = false;
     private Scanner console = new Scanner(System.in);
-    Durak durak = new Durak();
+    private Durak durak = new Durak();
 
     public void start() {
         menuPrint();
@@ -51,12 +51,12 @@ public class ConsoleApplication {
     }
 
     //---------ДУРАК---------//
-    private void durak() {
+    public void durak() {
         System.out.println("----------- \nИгра началась!");
         System.out.println("Козырь:" + cardSuit(durak.getTrumpSuit()) + "\n-----------");
         while (durak.getState() == Durak.GameState.PLAYING) {
             int max = 6;
-            int count = 1;
+            int count = 0;
             if (durak.isFirstMove()) {
                 max = 5;
                 durak.setFirstMove(false);
@@ -66,9 +66,9 @@ public class ConsoleApplication {
                 while (!end) {
                     //нападение
                     List<Card> attack;
-                    if (count == 1) {
+                    if (count == 0) {
                         attack = durak.enemyFirstAttack(max);
-                        count = 0;
+                        count = 1;
                     } else {
                         attack = durak.enemySecondAttack(max);
                     }
@@ -138,96 +138,85 @@ public class ConsoleApplication {
                     } //конец хода юзера
                 } //конец хода
                 System.out.println("Конец хода!");
-                durak.finishTurn();
+                durak.finishTurn(false);
                 durak.setEnemyTurn(false);
                 durak.setUserTurn(true);
             } else {
                 if (durak.isUserTurn()) {
-                    printUserHand();
-                    int tmp = 0;
-                    List<Card> attack = new ArrayList<>();
                     boolean end = false;
-                    //while (!end) {
-                    //нападение
-                    System.out.println("Ваш ход: \n 1)Одна карта \n 2)Несколько карт");
-                    while (tmp == 0) {
-                        tmp = console.nextInt();
-                        switch (tmp) {
-                            case 1 -> {
-                                for (int i = 0; i < 1; i++) {
-                                    System.out.print("Введите номер карты: ");
-                                    int index = console.nextInt();
-                                    // проверка корректности индекса
-                                    if (index < 1 || index > durak.getUserHand().getSize()) {
-                                        System.out.println("Введено некорректное значение!");
-                                        i--;
-                                        continue;
-                                    }
-                                    // проверка на повтор карты
-                                    int j;
-                                    for (j = 0; j < attack.size(); j++) {
-                                        if (attack.get(j) == durak.getUserHand().getCard(index - 1)) {
-                                            System.out.println("Вы уже использовали эту карту!");
-                                            break;
-                                        }
-                                    }
-                                    if (j < attack.size()) {
-                                        i--;
-                                        continue;
-                                    }
-                                    // если все в порядке
-                                    attack.add(durak.getUserHand().getCard(index - 1));
-                                    durak.getUserHand().remove(attack);
-                                }
-                            }
-                            case 2 -> {
-                                System.out.println("Сколько карт ходите выложить?");
+                    while (!end) {
+                        if (count < max) {
+                            //нападение
+                            List<Card> attack = new ArrayList<>();
+                            printUserHand();
+                            System.out.println("Ваш ход:\nВы можете напасть еще " + (max - count) + " картами!");
+                            System.out.println("Сколько карт хотите выложить?");
+                            int tmp = 0;
+                            while (tmp == 0) {
                                 int num = console.nextInt();
-                                System.out.println("Введите номера карт: ");
-                                for (int i = 0; i < num; i++) {
-                                    System.out.print(i + 1 + ")" + " ");
-                                    int index = console.nextInt();
-                                    // проверка корректности индекса
-                                    if (index < 1 || index > durak.getUserHand().getSize()) {
-                                        System.out.println("Введено некорректное значение!");
-                                        i--;
-                                        continue;
-                                    }
-                                    //проверка корректности карты
-                                    if (i > 0) {
-                                        Card selectedCard = durak.getUserHand().getCard(index - 1);
-                                        if (selectedCard.getValue() != attack.get(attack.size() - 1).getValue()) {
-                                            i--;
-                                            continue;
+                                if ((num < 1 || num > max - count) && count == 0) {
+                                    System.out.println("Введено некорректное значение!");
+                                } else {
+                                    if (num == 0 && count != 0) {
+                                        end = true;
+                                    } else {
+                                        System.out.println("Введите номера карт: ");
+                                        for (int i = 0; i < num && count < max; i++) {
+                                            System.out.print(i + 1 + ")" + " ");
+                                            int index = console.nextInt();
+                                            // проверка корректности индекса
+                                            if (index < 1 || index > durak.getUserHand().getSize()) {
+                                                System.out.println("Введено некорректное значение!");
+                                                i--;
+                                                continue;
+                                            }
+                                            //проверка корректности карты
+                                            if (durak.ruleCheckForThrowIn(durak.getUserHand().getCard(index - 1), attack)) {
+                                                System.out.println("Нарушены правила игры!");
+                                                i--;
+                                                continue;
+                                            }
+                                            // проверка на повтор карты
+                                            int j;
+                                            for (j = 0; j < attack.size(); j++) {
+                                                if (attack.get(j) == durak.getUserHand().getCard(index - 1)) {
+                                                    System.out.println("Вы уже использовали эту карту!");
+                                                    break;
+                                                }
+                                            }
+                                            if (j < attack.size()) {
+                                                i--;
+                                                continue;
+                                            }
+                                            // если все в порядке
+                                            count++;
+                                            attack.add(durak.getUserHand().getCard(index - 1));
                                         }
+                                        durak.getUserHand().remove(attack);
                                     }
-                                    // проверка на повтор карты
-                                    int j;
-                                    for (j = 0; j < attack.size(); j++) {
-                                        if (attack.get(j) == durak.getUserHand().getCard(index - 1)) {
-                                            System.out.println("Вы уже использовали эту карту!");
-                                            break;
-                                        }
-                                    }
-                                    if (j < attack.size()) {
-                                        i--;
-                                        continue;
-                                    }
-                                    // если все в порядке
-                                    attack.add(durak.getUserHand().getCard(index - 1));
+                                    tmp = 1;
                                 }
-                                durak.getUserHand().remove(attack);
                             }
-                            default -> {
-                                System.out.println("Введено неверное значение!");
-                                tmp = 0;
+                            if (!end) {
+                                //защита
+                                List<Card> defence = durak.enemyDefence(attack);
+                                if (defence.size() == 0) {
+                                    System.out.println("Противник потянул карты");
+                                    end = true;
+                                } else {
+                                    System.out.println("Противник отбился:");
+                                    for (int i = 0; i < defence.size(); i++) {
+                                        Card card = defence.get(i);
+                                        System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit()));
+                                    }
+                                }
+                                durak.addInEnemyMoveList(defence);
+                                durak.addInUserMoveList(attack);
                             }
-                        }
-                    }
-                    //защита
-                    System.out.println("Тут должна быть защита");
-                    //}
+                        } else end = true;
+                    } // конец хода
                     System.out.println("Конец хода!");
+                    durak.finishTurn(true);
                     durak.setEnemyTurn(true);
                     durak.setUserTurn(false);
                 }

@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Pack {
-    private List<Card> pack = new ArrayList<>();
+    private List<Card> pack = new ArrayList<>(54);
     private final List<String> suit = Arrays.asList("h", "p", "d", "c");
 
     public Pack(int numberOfCards) {
@@ -18,23 +18,22 @@ public class Pack {
 
     private List<Card> getPack(int n) {
         boolean jokers = false;
-        int numberOfCards = n;
+        int num = n;
 
         //проверка на джокеров
-        if (numberOfCards == 54) {
-            numberOfCards -= 2;
+        if (num == 54) {
+            num -= 2;
             jokers = true;
         }
 
         //формирование колоды
-        for (int i = 0; i < numberOfCards; i++) {
-            for (String curSuit : suit) {
-                for (int j = 0; j < numberOfCards / 4; j++) {
-                    Card card = new Card(j + (2 + (52 - numberOfCards) / 4), curSuit);
-                    pack.add(card);
-                }
+        for (String curSuit : suit) {
+            for (int j = 0; j < num / 4; j++) {
+                Card card = new Card(j + (2 + (52 - num) / 4), curSuit);
+                pack.add(card);
             }
         }
+
         if (jokers) {
             Card redJoker = new Card(15, "rJ");
             pack.add(redJoker);
