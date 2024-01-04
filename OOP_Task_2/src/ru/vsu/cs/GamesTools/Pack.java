@@ -1,12 +1,10 @@
-package ru.vsu.cs;
+package ru.vsu.cs.GamesTools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Pack {
     private List<Card> pack = new ArrayList<>(54);
-    private final List<String> suit = Arrays.asList("h", "p", "d", "c");
 
     public Pack(int numberOfCards) {
         this.pack = getPack(numberOfCards);
@@ -27,7 +25,7 @@ public class Pack {
         }
 
         //формирование колоды
-        for (String curSuit : suit) {
+        for (Card.Suits curSuit : Card.Suits.values()) {
             for (int j = 0; j < num / 4; j++) {
                 Card card = new Card(j + (2 + (52 - num) / 4), curSuit);
                 pack.add(card);
@@ -35,12 +33,14 @@ public class Pack {
         }
 
         if (jokers) {
-            Card redJoker = new Card(15, "rJ");
+            Card redJoker = new Card(15, Card.Suits.RED_JOKER);
             pack.add(redJoker);
-            Card blackJoker = new Card(15, "bJ");
+            Card blackJoker = new Card(15, Card.Suits.BLACK_JOKER);
             pack.add(blackJoker);
         }
 
         return pack;
     }
+
+
 }

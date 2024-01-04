@@ -1,7 +1,10 @@
-package ru.vsu.cs;
+package ru.vsu.cs.GamesTools;
+
+import ru.vsu.cs.GamesTools.Card;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Hand {
     private ArrayList<Card> hand = new ArrayList<>();
@@ -36,11 +39,26 @@ public class Hand {
         this.hand.clear();
     }
 
+    //runtime exception
     public Card getCard(int index) {
         if (index <= hand.size()) {
             return hand.get(index);
         } else System.err.println("Выход за рамки массива!");
         return null;
+    }
+
+    public boolean contains(Card card) {
+        return this.contains(card);
+    }
+
+    public boolean containsSuit(Card.Suits suit) {
+        for (int i = 0; i < this.getSize(); i++) {
+            Card card = this.getCard(i);
+            if (Objects.equals(card.getSuit(), suit)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean durakHandCheck() {
@@ -49,27 +67,27 @@ public class Hand {
         if (hand.size() == 6) {
             int[] suits = new int[4];
             for (int i = 0; i < 6; i++) {
-                String suit = hand.get(i).getSuit();
+                Card.Suits suit = hand.get(i).getSuit();
                 switch (suit) {
-                    case "h" -> {
+                    case HEARTS -> {
                         suits[0]++;
                         if (suits[0] == 5) {
                             isNull = true;
                         }
                     }
-                    case "p" -> {
+                    case SPADES -> {
                         suits[1]++;
                         if (suits[1] == 5) {
                             isNull = true;
                         }
                     }
-                    case "d" -> {
+                    case DIAMONDS -> {
                         suits[2]++;
                         if (suits[2] == 5) {
                             isNull = true;
                         }
                     }
-                    case "c" -> {
+                    case CLUBS -> {
                         suits[3]++;
                         if (suits[3] == 5) {
                             isNull = true;

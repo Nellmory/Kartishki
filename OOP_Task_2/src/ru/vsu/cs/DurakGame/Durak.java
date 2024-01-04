@@ -1,9 +1,13 @@
-package ru.vsu.cs;
+package ru.vsu.cs.DurakGame;
+
+import ru.vsu.cs.GamesTools.Card;
+import ru.vsu.cs.GamesTools.Hand;
+import ru.vsu.cs.GamesTools.Pack;
 
 import java.util.*;
 
-import static ru.vsu.cs.Card.CardState.NOT_USED;
-import static ru.vsu.cs.Card.CardState.USED;
+import static ru.vsu.cs.GamesTools.Card.CardState.NOT_USED;
+import static ru.vsu.cs.GamesTools.Card.CardState.USED;
 
 public class Durak {
     private Pack pack = new Pack(36);
@@ -11,7 +15,7 @@ public class Durak {
     private Hand userHand = new Hand();
     private Hand enemyHand = new Hand();
     private final Random rnd = new Random();
-    private String trumpSuit;
+    private Card.Suits trumpSuit;
     private boolean isUserTurn = false;
     private boolean isEnemyTurn = false;
     private List<Card> enemyMove = new ArrayList<>();
@@ -22,12 +26,24 @@ public class Durak {
         NOT_STARTED,
         PLAYING,
         WIN,
-        FAIL
+        FAIL,
+        DRAW
     }
 
-    GameState state = GameState.NOT_STARTED;
+    private GameState state = GameState.NOT_STARTED;
 
     private void calcState() {
+        if (userHand.getSize() == enemyHand.getSize() && userHand.getSize() == 0 && gamingPack.empty()) {
+            state = GameState.DRAW;
+        } else {
+            if (userHand.getSize() != enemyHand.getSize() && userHand.getSize() == 0 && gamingPack.empty()) {
+                state = GameState.WIN;
+            } else {
+                if (userHand.getSize() != enemyHand.getSize() && enemyHand.getSize() == 0 && gamingPack.empty()) {
+                    state = GameState.FAIL;
+                }
+            }
+        }
     }
 
     public void newGame() {
@@ -102,10 +118,11 @@ public class Durak {
                 Card enemyMoveCard = enemyMove.get(j);
                 if ((card.getValue() == userMoveCard.getValue() || card.getValue() == enemyMoveCard.getValue()) && !Objects.equals(card.getSuit(), trumpSuit) && res.size() < max) {
                     res.add(card);
-                    enemyHand.remove(card);
+                    break;
                 }
             }
         }
+        enemyHand.remove(res);
         return res;
     }
 
@@ -170,8 +187,8 @@ public class Durak {
                         isNotUsed = true;
                     }
                 }
-                hand.add(card);
                 card.setState(USED);
+                hand.add(card);
             }
             if (!hand.durakHandCheck()) {
                 for (int i = 0; i < 6; i++) {
@@ -230,6 +247,7 @@ public class Durak {
         }
         enemyMove.clear();
         userMove.clear();
+        calcState();
     }
 
     public void pickUpCards(Hand hand, List<Card> turn) {
@@ -268,14 +286,15 @@ public class Durak {
                 return false;
             }
         }
-        if (attack.size() != 0) {
-            for (int i = 0; i < attack.size(); i++) {
-                Card userPrevCard = attack.get(i);
+        if (attack.size() != 0 && userMove.size() == 0) {
+            for (Card userPrevCard : attack) {
                 if (attackCard.getValue() == userPrevCard.getValue()) {
                     return false;
                 }
             }
-        } else return false;
+        } else {
+            return userMove.size() != 0;
+        }
         return true;
     }
 
@@ -311,7 +330,7 @@ public class Durak {
         userMove.addAll(turn);
     }
 
-    public String getTrumpSuit() {
+    public Card.Suits getTrumpSuit() {
         return trumpSuit;
     }
 
@@ -345,5 +364,9 @@ public class Durak {
 
     public Hand getUserHand() {
         return userHand;
+    }
+
+    public int getEnemyHandSize() {
+        return enemyHand.getSize();
     }
 }

@@ -1,4 +1,6 @@
-package ru.vsu.cs;
+package ru.vsu.cs.DurakGame;
+
+import ru.vsu.cs.GamesTools.Card;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +54,9 @@ public class ConsoleApplication {
 
     //---------ДУРАК---------//
     public void durak() {
+        boolean takeCards = false;
         System.out.println("----------- \nИгра началась!");
-        System.out.println("Козырь:" + cardSuit(durak.getTrumpSuit()) + "\n-----------");
+        System.out.println("Козырь:" + cardSuit(durak.getTrumpSuit().toString()) + "\n-----------");
         while (durak.getState() == Durak.GameState.PLAYING) {
             int max = 6;
             int count = 0;
@@ -79,11 +82,11 @@ public class ConsoleApplication {
                     max -= attack.size();
                     for (int i = 0; i < attack.size(); i++) {
                         Card card = attack.get(i);
-                        System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit()));
+                        System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit().toString()));
                     }
                     //защита
                     printUserHand();
-                    System.out.println("Ваш ход: \n 1)Потянуть \n 2)Отбить");
+                    System.out.println("Ваш ход: \n 1)Забрать \n 2)Отбить");
                     int tmp = 0;
                     while (tmp == 0) {
                         tmp = console.nextInt();
@@ -91,6 +94,7 @@ public class ConsoleApplication {
                             case 1 -> {
                                 durak.pickUpCards(durak.getUserHand(), attack);
                                 durak.addInEnemyMoveList(attack);
+                                takeCards = true;
                                 end = true;
                             }
                             case 2 -> {
@@ -139,18 +143,26 @@ public class ConsoleApplication {
                 } //конец хода
                 System.out.println("Конец хода!");
                 durak.finishTurn(false);
-                durak.setEnemyTurn(false);
-                durak.setUserTurn(true);
+                if (!takeCards) {
+                    durak.setEnemyTurn(false);
+                    durak.setUserTurn(true);
+                } else takeCards = false;
             } else {
                 if (durak.isUserTurn()) {
                     boolean end = false;
+                    if (max > durak.getUserHand().getSize()) {
+                        max = durak.getUserHand().getSize();
+                    }
+                    if (max > durak.getEnemyHandSize()) {
+                        max = durak.getEnemyHandSize();
+                    }
                     while (!end) {
                         if (count < max) {
                             //нападение
                             List<Card> attack = new ArrayList<>();
+                            System.out.println("Ваш ход:");
                             printUserHand();
-                            System.out.println("Ваш ход:\nВы можете напасть еще " + (max - count) + " картами!");
-                            System.out.println("Сколько карт хотите выложить?");
+                            System.out.println("Вы можете напасть еще " + (max - count) + " картами!" + "\nУ противника " + durak.getEnemyHandSize() + " карт" + "\nСколько карт хотите выложить?");
                             int tmp = 0;
                             while (tmp == 0) {
                                 int num = console.nextInt();
@@ -201,13 +213,14 @@ public class ConsoleApplication {
                                 //защита
                                 List<Card> defence = durak.enemyDefence(attack);
                                 if (defence.size() == 0) {
-                                    System.out.println("Противник потянул карты");
+                                    System.out.println("Противник забрал карты");
+                                    takeCards = true;
                                     end = true;
                                 } else {
                                     System.out.println("Противник отбился:");
                                     for (int i = 0; i < defence.size(); i++) {
                                         Card card = defence.get(i);
-                                        System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit()));
+                                        System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit().toString()));
                                     }
                                 }
                                 durak.addInEnemyMoveList(defence);
@@ -217,11 +230,14 @@ public class ConsoleApplication {
                     } // конец хода
                     System.out.println("Конец хода!");
                     durak.finishTurn(true);
-                    durak.setEnemyTurn(true);
-                    durak.setUserTurn(false);
+                    if (!takeCards) {
+                        durak.setEnemyTurn(true);
+                        durak.setUserTurn(false);
+                    } else takeCards = false;
                 }
             }
         }
+        printResult();
     }
 
     private String cardValue(int cardValue) {
@@ -248,10 +264,22 @@ public class ConsoleApplication {
     }
 
     private void printUserHand() {
-        System.out.println("----------- \nКозырь:" + cardSuit(durak.getTrumpSuit()) + "\n----------- \nВаши карты:");
+        System.out.println("----------- \nКозырь:" + cardSuit(durak.getTrumpSuit().toString()) + "\n----------- \nВаши карты:");
         for (int i = 0; i < durak.getUserHand().getSize(); i++) {
             Card card = durak.getUserHand().getCard(i);
-            System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit()));
+            System.out.println(i + 1 + ")" + " " + cardValue(card.getValue()) + " " + cardSuit(card.getSuit().toString()));
+        }
+    }
+
+    private void printResult() {
+        if (durak.getState() == Durak.GameState.WIN) {
+            System.out.println("ВЫ ПОБЕДИЛИ! :D");
+        }
+        if (durak.getState() == Durak.GameState.DRAW) {
+            System.out.println("НИЧЬЯ! =)");
+        }
+        if (durak.getState() == Durak.GameState.FAIL) {
+            System.out.println("ПРОИГРЫШ =(");
         }
     }
 }
