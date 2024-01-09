@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane fx:id="anchorPaneStart" prefHeight="600.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.vsu.cs.StartController">
+    <TextField fx:id="textField1"/>
+    <TextField fx:id="textField2"/>
+    <Button fx:id="DurakButton" mnemonicParsing="false"/>
+    <Button fx:id="HeartsButton" mnemonicParsing="false"/>
+    <Button fx:id="PasiansButton" mnemonicParsing="false"/>
+    <Button fx:id="ExitButton" mnemonicParsing="false"/>
+</AnchorPane>
