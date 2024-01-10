@@ -16,6 +16,7 @@ public class Durak {
     private Hand enemyHand = new Hand();
     private final Random rnd = new Random();
     private Card.Suits trumpSuit;
+    private int trumpVal;
     private boolean isUserTurn = false;
     private boolean isEnemyTurn = false;
     private List<Card> enemyMove = new ArrayList<>();
@@ -65,6 +66,7 @@ public class Durak {
             gamingPack.push(card);
             if (i == 0) {
                 trumpSuit = card.getSuit();
+                trumpVal = card.getValue();
             }
         }
         //определим, кто первый ходит
@@ -196,7 +198,9 @@ public class Durak {
                     card.setState(NOT_USED);
                 }
                 hand.clear();
-            } else ready = true;
+            } else {
+                ready = true;
+            }
         }
     }
 
@@ -322,6 +326,14 @@ public class Durak {
         } else return null;
     }
 
+    public Card getTrampCard() {
+        if (trumpVal != 0) {
+            Card card = new Card(trumpVal, trumpSuit);
+            card.setFaceState(Card.CardFaceState.FACE_UP);
+            return card;
+        } else return null;
+    }
+
     public void addInEnemyMoveList(List<Card> turn) {
         enemyMove.addAll(turn);
     }
@@ -364,6 +376,10 @@ public class Durak {
 
     public Hand getUserHand() {
         return userHand;
+    }
+
+    public Hand getEnemyHand() {
+        return enemyHand;
     }
 
     public int getEnemyHandSize() {

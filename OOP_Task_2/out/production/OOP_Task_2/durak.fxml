@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.image.ImageView?>
+
+<?import javafx.scene.control.Button?>
 <AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.vsu.cs.DurakController">
+            fx:controller="ru.vsu.cs.DurakBotController">
     <Canvas fx:id="canvas" height="800" width="1532" AnchorPane.topAnchor="30.0"/>
+    <StackPane fx:id="user1">
 
+    </StackPane>
+    <StackPane fx:id="user2">
+
+    </StackPane>
+    <Button fx:id="defend" mnemonicParsing="false"/>
+    <Button fx:id="takeCards" mnemonicParsing="false"/>
 </AnchorPane>

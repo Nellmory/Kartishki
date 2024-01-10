@@ -1,10 +1,12 @@
 package ru.vsu.cs;
 
+import javafx.scene.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Hand {
+public class Hand extends Node {
     private ArrayList<Card> hand = new ArrayList<>();
 
     public Hand() {
@@ -100,5 +102,10 @@ public class Hand {
             System.err.println("Неполный набор карт!");
         }
         return true;
+    }
+
+    @Override
+    public Node getStyleableNode() {
+        return super.getStyleableNode();
     }
 }
