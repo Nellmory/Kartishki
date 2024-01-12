@@ -1,4 +1,4 @@
-package ru.vsu.cs;
+package ru.vsu.cs.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

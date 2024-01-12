@@ -1,26 +1,22 @@
 package ru.vsu.cs;
 
-import ru.vsu.cs.Card;
-import ru.vsu.cs.Hand;
-import ru.vsu.cs.Pack;
-
 import java.util.*;
 
 import static ru.vsu.cs.Card.CardState.NOT_USED;
 import static ru.vsu.cs.Card.CardState.USED;
 
 public class Durak {
-    private Pack pack = new Pack(36);
-    private Stack<Card> gamingPack = new Stack<>();
-    private Hand userHand = new Hand();
-    private Hand enemyHand = new Hand();
+    private final Pack pack = new Pack(36);
+    private final Stack<Card> gamingPack = new Stack<>();
+    private final Hand userHand = new Hand();
+    private final Hand enemyHand = new Hand();
     private final Random rnd = new Random();
     private Card.Suits trumpSuit;
     private int trumpVal;
     private boolean isUserTurn = false;
     private boolean isEnemyTurn = false;
-    private List<Card> enemyMove = new ArrayList<>();
-    private List<Card> userMove = new ArrayList<>();
+    private final List<Card> enemyMove = new ArrayList<>();
+    private final List<Card> userMove = new ArrayList<>();
     private boolean firstMove = true;
 
     public enum GameState {
@@ -342,10 +338,6 @@ public class Durak {
         userMove.addAll(turn);
     }
 
-    public Card.Suits getTrumpSuit() {
-        return trumpSuit;
-    }
-
     public boolean isFirstMove() {
         return firstMove;
     }
@@ -384,5 +376,13 @@ public class Durak {
 
     public int getEnemyHandSize() {
         return enemyHand.getSize();
+    }
+
+    public List<Card> getUserMove() {
+        return userMove;
+    }
+
+    public int getGamingPackSize() {
+        return gamingPack.size();
     }
 }

@@ -2,11 +2,11 @@ package ru.vsu.cs;
 
 
 public class Card {
-    private int value;
+    private final int value;
     private CardState state;
     private GameCardState gameState;
     private CardFaceState faceState;
-    private Suits suit;
+    private final Suits suit;
 
     public enum CardState {
         USED,

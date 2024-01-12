@@ -2,12 +2,11 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.image.ImageView?>
 
 <?import javafx.scene.control.Button?>
 <AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.vsu.cs.DurakBotController">
+            fx:controller="ru.vsu.cs.controllers.DurakBotController">
     <Canvas fx:id="canvas" height="800" width="1532" AnchorPane.topAnchor="30.0"/>
     <StackPane fx:id="user1">
 
@@ -15,6 +14,15 @@
     <StackPane fx:id="user2">
 
     </StackPane>
+    <StackPane fx:id="battleField">
+
+    </StackPane>
+    <StackPane fx:id="battleField2">
+
+    </StackPane>
     <Button fx:id="defend" mnemonicParsing="false"/>
     <Button fx:id="takeCards" mnemonicParsing="false"/>
+    <Button fx:id="attack" mnemonicParsing="false"/>
+    <Button fx:id="play" mnemonicParsing="false"/>
+    <Button fx:id="stop" mnemonicParsing="false"/>
 </AnchorPane>
