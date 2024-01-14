@@ -46,6 +46,23 @@ public class StartController {
             }
         });
 
+        PasiansButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) PasiansButton.getScene().getWindow();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/pasians.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load(), 900, 700);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                stage.setTitle("Card Games");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
         ExitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {

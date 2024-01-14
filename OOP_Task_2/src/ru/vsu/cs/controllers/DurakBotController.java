@@ -62,16 +62,16 @@ public class DurakBotController {
         Card trumpCard = durak.getTrampCard();
 
         //подготовка сцены
-        anchorPane.setStyle("-fx-background-image: url('images/table.jpg')");
+        anchorPane.setStyle("-fx-background-image: url('images/durakTable.jpg')");
 
         //подготовка к игре
-        prepareForGame(userHand, enemyHand, trumpCard);
+        prepareForGame(trumpCard);
 
         //игра
         durak();
     }
 
-    private void prepareForGame(Hand userHand, Hand enemyHand, Card trumpCard) {
+    private void prepareForGame(Card trumpCard) {
         //индикатор хода
         if (durak.isEnemyTurn()) {
             turn = new TextField("Ход Бота");
@@ -210,38 +210,6 @@ public class DurakBotController {
         battleField2.setLayoutY(280);
     }
 
-    private void playButMouseEvent(MouseEvent mouseEvent) {
-        play.setVisible(false);
-        if (end) {
-            durak();
-            updateHand(userHand, user1);
-            updateHand(enemyHand, user2);
-            if (durak.getGamingPackSize() == 1) {
-                gamingPack.setVisible(false);
-            }
-            if (durak.getGamingPackSize() == 0) {
-                gamingPack.setVisible(false);
-                trumpCardImage.setVisible(false);
-            }
-            durak();
-        } else {
-            updateHand(userHand, user1);
-            updateHand(enemyHand, user2);
-            durak();
-        }
-    }
-
-    private void defendButtons(boolean sw) {
-        defend.setVisible(sw);
-        takeCards.setVisible(sw);
-    }
-
-    private void editClue(String str, int size) {
-        clue.setVisible(true);
-        clue.setText(str);
-        clue.setMinWidth(size);
-    }
-
     private void updateHand(Hand hand, StackPane stackPane) {
         stackPane.getChildren().clear();
         int j = 0;
@@ -267,6 +235,27 @@ public class DurakBotController {
         }
     }
 
+    private void playButMouseEvent(MouseEvent mouseEvent) {
+        play.setVisible(false);
+        if (end) {
+            durak();
+            updateHand(userHand, user1);
+            updateHand(enemyHand, user2);
+            if (durak.getGamingPackSize() == 1) {
+                gamingPack.setVisible(false);
+            }
+            if (durak.getGamingPackSize() == 0) {
+                gamingPack.setVisible(false);
+                trumpCardImage.setVisible(false);
+            }
+            durak();
+        } else {
+            updateHand(userHand, user1);
+            updateHand(enemyHand, user2);
+            durak();
+        }
+    }
+
     private void defButMouseEvent(MouseEvent mouseEvent) {
         defButClicked = true;
         defendButtons(false);
@@ -289,6 +278,17 @@ public class DurakBotController {
         attack.setVisible(false);
         stop.setVisible(false);
         afterAttack();
+    }
+
+    private void defendButtons(boolean sw) {
+        defend.setVisible(sw);
+        takeCards.setVisible(sw);
+    }
+
+    private void editClue(String str, int size) {
+        clue.setVisible(true);
+        clue.setText(str);
+        clue.setMinWidth(size);
     }
 
     private void durak() {

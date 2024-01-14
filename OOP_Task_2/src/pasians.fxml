@@ -10,5 +10,47 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ru.vsu.cs.controllers.PasiansController"
             prefHeight="400.0" prefWidth="600.0">
+    <StackPane fx:id="playingField1">
 
+    </StackPane>
+    <StackPane fx:id="playingField2">
+
+    </StackPane>
+    <StackPane fx:id="playingField3">
+
+    </StackPane>
+    <StackPane fx:id="playingField4">
+
+    </StackPane>
+    <StackPane fx:id="playingField5">
+
+    </StackPane>
+    <StackPane fx:id="playingField6">
+
+    </StackPane>
+    <StackPane fx:id="playingField7">
+
+    </StackPane>
+    <StackPane fx:id="keepingSpace">
+
+    </StackPane>
+    <Button fx:id="endGame" mnemonicParsing="false"/>
+    <StackPane fx:id="clubsKS">
+
+    </StackPane>
+    <StackPane fx:id="heartsKS">
+
+    </StackPane>
+    <StackPane fx:id="spadesKS">
+
+    </StackPane>
+    <StackPane fx:id="diamondsKS">
+
+    </StackPane>
+    <StackPane fx:id="cardsFromGamingPack">
+
+    </StackPane>
+    <StackPane fx:id="cardsFromGP">
+
+    </StackPane>
 </AnchorPane>
