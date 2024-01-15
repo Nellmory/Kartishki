@@ -7,8 +7,8 @@
             fx:controller="ru.vsu.cs.controllers.StartController">
     <TextField fx:id="textField1"/>
     <TextField fx:id="textField2"/>
-    <Button fx:id="DurakButton" mnemonicParsing="false"/>
-    <Button fx:id="HeartsButton" mnemonicParsing="false"/>
-    <Button fx:id="PasiansButton" mnemonicParsing="false"/>
-    <Button fx:id="ExitButton" mnemonicParsing="false"/>
+    <Button fx:id="durakButton" mnemonicParsing="false"/>
+    <Button fx:id="heartsButton" mnemonicParsing="false"/>
+    <Button fx:id="pasiansButton" mnemonicParsing="false"/>
+    <Button fx:id="exitButton" mnemonicParsing="false"/>
 </AnchorPane>

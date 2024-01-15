@@ -20,11 +20,13 @@ public class Pasians {
         FAIL
     }
 
-    private void calcState() {
+    public void calcState() {
         for (List<Card> target : playingField) {
-            Card lastCard = target.get(target.size() - 1);
-            if (lastCard.getFaceState() != Card.CardFaceState.FACE_UP) {
-                lastCard.setFaceState(Card.CardFaceState.FACE_UP);
+            if (target.size() != 0) {
+                Card lastCard = target.get(target.size() - 1);
+                if (lastCard.getFaceState() != Card.CardFaceState.FACE_UP) {
+                    lastCard.setFaceState(Card.CardFaceState.FACE_UP);
+                }
             }
         }
         boolean pF = true;
@@ -95,17 +97,25 @@ public class Pasians {
         }
     }
 
-    public void putOnTop(int indexOfColumn, Card card) {
+    public boolean putOnTop(int indexOfColumn, Card card) {
         List<Card> target = playingField.get(indexOfColumn);
         if (target.isEmpty() && card.getValue() == 13) {
             target.add(card);
+            calcState();
+            return true;
         } else {
-            Card lastCard = target.get(target.size() - 1);
-            if (lastCard.getValue() != 14 && lastCard.getValue() == card.getValue() + 1 && card.isSuitRed() != lastCard.isSuitRed() ||
-                    lastCard.getValue() == 2 && card.getValue() == 14 && card.isSuitRed() != lastCard.isSuitRed()) {
-                target.add(card);
+            if (!target.isEmpty()) {
+                Card lastCard = target.get(target.size() - 1);
+                if (lastCard.getValue() != 14 && lastCard.getValue() == card.getValue() + 1 && card.isSuitRed() != lastCard.isSuitRed() ||
+                        lastCard.getValue() == 2 && card.getValue() == 14 && card.isSuitRed() != lastCard.isSuitRed()) {
+                    target.add(card);
+                    calcState();
+                    return true;
+                }
             }
         }
+        calcState();
+        return false;
     }
 
     public boolean putInKeepingSpace(int indexOfColumn, Card card) {
@@ -139,6 +149,17 @@ public class Pasians {
         }
     }
 
+    public void removeCardFromGamingPack(int index) {
+        if (!gamingPack.isEmpty() && index < gamingPack.size()) {
+            gamingPack.remove(index);
+            calcState();
+        }
+    }
+
+    public int getSizeOfGamingPack() {
+        return gamingPack.size();
+    }
+
     public void removeFromPlayingField(int indexOfColumn, Card card) {
         playingField.get(indexOfColumn).remove(card);
         calcState();
@@ -158,5 +179,19 @@ public class Pasians {
 
     public void setState(GameState state) {
         this.state = state;
+    }
+
+    public Card getCardFromKeepingSpace(int indexOfColumn, int indexOfCard) {
+        List<Card> target = spaceForKeeping.get(indexOfColumn);
+        if (!target.isEmpty() && indexOfCard < target.size() && indexOfCard >= 0) {
+            return target.get(indexOfCard);
+        } else {
+            return null;
+        }
+    }
+
+    public void removeFromKeepingSpace(int indexOfColumn, Card card) {
+        spaceForKeeping.get(indexOfColumn).remove(card);
+        calcState();
     }
 }

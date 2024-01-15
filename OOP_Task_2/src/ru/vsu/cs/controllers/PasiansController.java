@@ -33,20 +33,24 @@ public class PasiansController {
     public StackPane spadesKS;
     public StackPane diamondsKS;
     public StackPane cardsFromGP = new StackPane();
-    private List<StackPane> playingFieldFX = new ArrayList<>(7);
-    private List<StackPane> keepingSpaceFX = new ArrayList<>(4);
+    private final List<StackPane> playingFieldFX = new ArrayList<>(7);
+    private final List<StackPane> keepingSpaceFX = new ArrayList<>(4);
     private List<List<Card>> playingField;
     private List<List<Card>> spaceForKeeping;
     private ImageView gamingPack;
+    private ImageView repeatGP;
     private TextField clue;
-    private int indexForGamingPack = 0;
+    private int indexForGamingPack = -1;
+    private int sizeOfGP;
     private final Pasians pasians = new Pasians();
     private FocusedCard focusedCard = null;
+    private List<FocusedCard> focusedCards = null;
 
     @FXML
     private void initialize() {
         //подготовка игры
         pasians.newGame();
+        sizeOfGP = pasians.getSizeOfGamingPack();
         playingField = pasians.getPlayingField();
         spaceForKeeping = pasians.getSpaceForKeeping();
 
@@ -55,9 +59,6 @@ public class PasiansController {
 
         //подготовка к игре
         prepareForGame();
-
-        //игра
-        pasians();
     }
 
     private void prepareForGame() {
@@ -102,8 +103,7 @@ public class PasiansController {
 
         //Обработка кнопок
         endGame.setText("Закончить игру");
-        endGame.setStyle("-fx-background-color: #7cb342; -fx-font: 16 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
+        endGame.setStyle("-fx-background-color: #7cb342; -fx-font: 16 times-new-roman; -fx-text-fill: white;" + "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
         endGame.setMaxHeight(50);
         endGame.setMaxWidth(150);
         endGame.setLayoutX(735);
@@ -113,60 +113,19 @@ public class PasiansController {
         endGame.setVisible(true);
         endGame.setOnMouseClicked(this::endGameButEvent);
 
-        /*
-        takeCards.setText("Взять карты");
-        takeCards.setStyle("-fx-background-color: #800000; -fx-font: 16 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
-        takeCards.setMaxHeight(50);
-        takeCards.setMaxWidth(150);
-        takeCards.setLayoutX(695);
-        takeCards.setLayoutY(622);
-        takeCards.setDisable(false);
-        takeCards.setFocusTraversable(false);
-        takeCards.setVisible(false);
-        takeCards.setOnMouseClicked(this::takeCardsButMouseEvent);
-
-        attack.setText("Атака!");
-        attack.setStyle("-fx-background-color: #800000; -fx-font: 18 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
-        attack.setMaxHeight(50);
-        attack.setMaxWidth(100);
-        attack.setLayoutX(710);
-        attack.setLayoutY(525);
-        attack.setDisable(false);
-        attack.setFocusTraversable(false);
-        attack.setVisible(false);
-        attack.setOnMouseClicked(this::attackButMouseEvent);
-
-        stop.setText("Закончить ход");
-        stop.setStyle("-fx-background-color: #800000; -fx-font: 16 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
-        stop.setMaxHeight(50);
-        stop.setMaxWidth(150);
-        stop.setLayoutX(670);
-        stop.setLayoutY(525);
-        stop.setDisable(false);
-        stop.setFocusTraversable(false);
-        stop.setVisible(false);
-        stop.setOnMouseClicked(this::attackButMouseEvent);
-
-        play.setText("Ок!");
-        play.setStyle("-fx-background-color: #800000; -fx-font: 18 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
-        play.setMaxHeight(50);
-        play.setMaxWidth(100);
-        play.setLayoutX(710);
-        play.setLayoutY(525);
-        play.setDisable(false);
-        play.setVisible(false);
-        play.setFocusTraversable(false);
-        play.setOnMouseClicked(this::playButMouseEvent);*/
+        repeatGP = new ImageView("images/rep.png");
+        repeatGP.setFitHeight(65);
+        repeatGP.setFitWidth(65);
+        anchorPane.getChildren().add(repeatGP);
+        repeatGP.setLayoutX(72);
+        repeatGP.setLayoutY(77);
+        repeatGP.setVisible(false);
+        repeatGP.setOnMouseClicked(this::repeatGP);
 
         //поле-подсказка
         clue = new TextField(" ");
         anchorPane.getChildren().add(clue);
-        clue.setStyle("-fx-background-color: #7cb342; -fx-font: 16 times-new-roman; -fx-text-fill: white;" +
-                "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
+        clue.setStyle("-fx-background-color: #7cb342; -fx-font: 16 times-new-roman; -fx-text-fill: white;" + "-fx-border-color: white; -fx-border-radius: 5px; -fx-background-radius: 5 5 5 5;");
         clue.setMinHeight(50);
         clue.setMinWidth(260);
         clue.setLayoutX(45);
@@ -191,7 +150,16 @@ public class PasiansController {
                 StackPane.setAlignment(image, Pos.TOP_CENTER);
                 StackPane.setMargin(image, new Insets(pad, 0, 0, 0));
                 stackPane.getChildren().add(image);
-                pad += 20;
+                pad += 27;
+            }
+            if (content.isEmpty()) {
+                ImageView image = new ImageView("images/keepingSpace.png");
+                image.setFitHeight(148);
+                image.setFitWidth(100);
+                image.setOnMouseClicked(this::mouseEvent);
+                StackPane.setAlignment(image, Pos.TOP_CENTER);
+                StackPane.setMargin(image, new Insets(pad, 0, 0, 0));
+                stackPane.getChildren().add(image);
             }
         }
     }
@@ -220,6 +188,12 @@ public class PasiansController {
         }
     }
 
+    private void updateGamingPack() {
+        sizeOfGP = pasians.getSizeOfGamingPack();
+        indexForGamingPack -= 1;
+        cardsFromGP.getChildren().remove(cardsFromGP.getChildren().size() - 1);
+    }
+
     private void KSMouseEvent(MouseEvent mouseEvent) {
         if (focusedCard != null) {
             ImageView image = (ImageView) mouseEvent.getSource();
@@ -230,9 +204,16 @@ public class PasiansController {
                 if (index >= 0) {
                     if (pasians.putInKeepingSpace(i, focusedCard.getCard())) {
                         updateKeepingSpace();
-                        pasians.removeFromPlayingField(focusedCard.getIndexOfStackPane(), focusedCard.getCard());
-                        updatePlayingField();
+                        if (focusedCard.getIndexOfStackPane() != -1) {
+                            pasians.removeFromPlayingField(focusedCard.getIndexOfStackPane(), focusedCard.getCard());
+                            updatePlayingField();
+                        } else {
+                            pasians.removeCardFromGamingPack(indexForGamingPack);
+                            updateGamingPack();
+                        }
                         focusedCard = null;
+                        clue.setVisible(false);
+                        result();
                     } else {
                         focusedCard = null;
                         editClue("Нарушены правила игры!", 220);
@@ -240,29 +221,132 @@ public class PasiansController {
                     return;
                 }
             }
+        } else {
+            ImageView image = (ImageView) mouseEvent.getSource();
+            int index;
+            for (int i = 0; i < 4; i++) {
+                StackPane stackPane = keepingSpaceFX.get(i);
+                index = stackPane.getChildren().indexOf(image);
+                if (index > 0) {
+                    if (focusedCard == null && focusedCards == null) {
+                        focusedCard = new FocusedCard(pasians.getCardFromKeepingSpace(i, index - 1), index, i - 5);
+                        editClue("Вы выбрали карту!", 200);
+                    }
+                    return;
+                }
+            }
         }
     }
 
-    private void useCardFromGP(MouseEvent mouseEvent) {
-        //доделать
+    private boolean putOnTopOfField(int indexOfPF, FocusedCard fC, boolean upd) {
+        if (pasians.putOnTop(indexOfPF, fC.getCard())) {
+            if (fC.getIndexOfStackPane() >= 0) {
+                pasians.removeFromPlayingField(fC.getIndexOfStackPane(), fC.getCard());
+            } else {
+                if (fC.getIndexOfStackPane() == -1) {
+                    pasians.removeCardFromGamingPack(indexForGamingPack);
+                    updateGamingPack();
+                } else {
+                    pasians.removeFromKeepingSpace(fC.getIndexOfStackPane() + 5, fC.getCard());
+                    updateKeepingSpace();
+                }
+            }
+            if (upd) {
+                updatePlayingField();
+                clue.setVisible(false);
+            }
+            result();
+            return true;
+        } else {
+            editClue("Нарушены правила игры!", 220);
+            return false;
+        }
+    }
+
+    private void repeatGP(MouseEvent mouseEvent) {
+        gamingPack.setVisible(true);
+        cardsFromGP.getChildren().clear();
+        repeatGP.setVisible(false);
     }
 
     private void takeCardFromGP(MouseEvent mouseEvent) {
-        //доделать
-        Card card = pasians.getCardFromGamingPack(indexForGamingPack);
+        if (indexForGamingPack == sizeOfGP - 1) {
+            indexForGamingPack = -1;
+        }
         indexForGamingPack++;
+        Card card = pasians.getCardFromGamingPack(indexForGamingPack);
         ImageView image = new ImageView(ImageReturn.getImage(card));
         image.setFitHeight(148);
         image.setFitWidth(100);
-        image.setOnMouseClicked(this::useCardFromGP);
+        image.setOnMouseClicked(this::mouseEvent);
         cardsFromGP.getChildren().add(image);
         cardsFromGP.setLayoutX(170);
         cardsFromGP.setLayoutY(35);
+        if (indexForGamingPack == sizeOfGP - 1) {
+            gamingPack.setVisible(false);
+            repeatGP.setVisible(true);
+        }
     }
 
     private void endGameButEvent(MouseEvent mouseEvent) {
         pasians.setState(Pasians.GameState.FAIL);
         result();
+    }
+
+    public void mouseEvent(MouseEvent mouseEvent) {
+        ImageView image = (ImageView) mouseEvent.getSource();
+        int index;
+        StackPane stackPane = cardsFromGP;
+        index = stackPane.getChildren().indexOf(image);
+        if (index >= 0) {
+            if (focusedCard == null && focusedCards == null) {
+                focusedCard = new FocusedCard(pasians.getCardFromGamingPack(indexForGamingPack), index, -1);
+                editClue("Вы выбрали карту!", 200);
+            }
+            return;
+        }
+        for (int i = 0; i < 7; i++) {
+            stackPane = playingFieldFX.get(i);
+            index = stackPane.getChildren().indexOf(image);
+            List<Card> content = playingField.get(i);
+            if (index >= 0 && content.isEmpty() || index >= 0 && playingField.get(i).get(index).getFaceState() == Card.CardFaceState.FACE_UP) {
+                if (focusedCard == null && focusedCards == null && !content.isEmpty()) {
+                    int sizeOfField = playingField.get(i).size();
+                    if (index == sizeOfField - 1) {
+                        focusedCard = new FocusedCard(playingField.get(i).get(index), index, i);
+                        editClue("Вы выбрали карту!", 200);
+                    } else {
+                        focusedCards = new ArrayList<>();
+                        for (int l = index; l < sizeOfField; l++) {
+                            FocusedCard fC = new FocusedCard(playingField.get(i).get(l), l, i);
+                            focusedCards.add(fC);
+                        }
+                        editClue("Вы выбрали несколько карт!", 230);
+                    }
+                    return;
+                } else {
+                    if (focusedCard != null) {
+                        putOnTopOfField(i, focusedCard, true);
+                        focusedCard = null;
+                        result();
+                    } else {
+                        if (focusedCards != null) {
+                            boolean upd = false;
+                            for (int l = 0; l < focusedCards.size(); l++) {
+                                FocusedCard fC = focusedCards.get(l);
+                                if (l == focusedCards.size() - 1) upd = true;
+                                boolean flag = putOnTopOfField(i, fC, upd);
+                                if (!flag) {
+                                    break;
+                                }
+                            }
+                            focusedCards = null;
+                            result();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void editClue(String str, int size) {
@@ -271,24 +355,8 @@ public class PasiansController {
         clue.setMinWidth(size);
     }
 
-    private void pasians() {
-
-    }
-
-    public void mouseEvent(MouseEvent mouseEvent) {
-        ImageView image = (ImageView) mouseEvent.getSource();
-        int index;
-        for (int i = 0; i < 7; i++) {
-            StackPane stackPane = playingFieldFX.get(i);
-            index = stackPane.getChildren().indexOf(image);
-            if (index >= 0 && playingField.get(i).get(index).getFaceState() == Card.CardFaceState.FACE_UP) {
-                focusedCard = new FocusedCard(playingField.get(i).get(index), index, i);
-                return;
-            }
-        }
-    }
-
     private void result() {
+        pasians.calcState();
         if (pasians.getState() == Pasians.GameState.WIN) {
             Stage stage = (Stage) endGame.getScene().getWindow();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/win.fxml"));

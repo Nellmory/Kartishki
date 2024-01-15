@@ -15,10 +15,10 @@ import ru.vsu.cs.Main;
 import java.io.IOException;
 
 public class StartController {
-    public Button HeartsButton;
-    public Button DurakButton;
-    public Button PasiansButton;
-    public Button ExitButton;
+    public Button heartsButton;
+    public Button durakButton;
+    public Button pasiansButton;
+    public Button exitButton;
     public TextField textField1;
     public TextField textField2;
     @FXML
@@ -29,10 +29,10 @@ public class StartController {
         anchorPaneStart.setStyle("-fx-base: #dbf4f9;");
         buttonControl();
 
-        DurakButton.setOnAction(new EventHandler<ActionEvent>() {
+        durakButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Stage stage = (Stage) DurakButton.getScene().getWindow();
+                Stage stage = (Stage) durakButton.getScene().getWindow();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/durak.fxml"));
                 Scene scene = null;
                 try {
@@ -40,16 +40,16 @@ public class StartController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                stage.setTitle("Card Games");
+                stage.setTitle("Дурак");
                 stage.setScene(scene);
                 stage.show();
             }
         });
 
-        PasiansButton.setOnAction(new EventHandler<ActionEvent>() {
+        pasiansButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Stage stage = (Stage) PasiansButton.getScene().getWindow();
+                Stage stage = (Stage) pasiansButton.getScene().getWindow();
                 FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/pasians.fxml"));
                 Scene scene = null;
                 try {
@@ -57,53 +57,70 @@ public class StartController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                stage.setTitle("Card Games");
+                stage.setTitle("Пасьянс");
                 stage.setScene(scene);
                 stage.show();
             }
         });
 
-        ExitButton.setOnAction(new EventHandler<ActionEvent>() {
+        heartsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Stage stage = (Stage) ExitButton.getScene().getWindow();
+                Stage stage = (Stage) heartsButton.getScene().getWindow();
+                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/hearts.fxml"));
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load(), 900, 700);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                stage.setTitle("Червы");
+                stage.setScene(scene);
+                stage.show();
+            }
+        });
+
+        exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Stage stage = (Stage) exitButton.getScene().getWindow();
                 stage.close();
             }
         });
     }
 
     private void buttonControl(){
-        DurakButton.setText("Дурак");
-        DurakButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
-        DurakButton.setMinWidth(35);
-        DurakButton.setMinHeight(20);
-        DurakButton.setLayoutX(40);
-        DurakButton.setLayoutY(230);
-        DurakButton.setDisable(false);
+        durakButton.setText("Дурак");
+        durakButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
+        durakButton.setMinWidth(35);
+        durakButton.setMinHeight(20);
+        durakButton.setLayoutX(40);
+        durakButton.setLayoutY(230);
+        durakButton.setDisable(false);
 
-        HeartsButton.setText("Червы");
-        HeartsButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
-        HeartsButton.setMinWidth(35);
-        HeartsButton.setMinHeight(20);
-        HeartsButton.setLayoutX(40);
-        HeartsButton.setLayoutY(320);
-        HeartsButton.setDisable(false);
+        heartsButton.setText("Червы");
+        heartsButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
+        heartsButton.setMinWidth(35);
+        heartsButton.setMinHeight(20);
+        heartsButton.setLayoutX(40);
+        heartsButton.setLayoutY(320);
+        heartsButton.setDisable(false);
 
-        PasiansButton.setText("Пасьянс");
-        PasiansButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
-        PasiansButton.setMinWidth(35);
-        PasiansButton.setMinHeight(20);
-        PasiansButton.setLayoutX(40);
-        PasiansButton.setLayoutY(410);
-        PasiansButton.setDisable(false);
+        pasiansButton.setText("Пасьянс");
+        pasiansButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
+        pasiansButton.setMinWidth(35);
+        pasiansButton.setMinHeight(20);
+        pasiansButton.setLayoutX(40);
+        pasiansButton.setLayoutY(410);
+        pasiansButton.setDisable(false);
 
-        ExitButton.setText("Выход");
-        ExitButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
-        ExitButton.setMinWidth(35);
-        ExitButton.setMinHeight(20);
-        ExitButton.setLayoutX(650);
-        ExitButton.setLayoutY(506);
-        ExitButton.setDisable(false);
+        exitButton.setText("Выход");
+        exitButton.setStyle("-fx-font: 29 times-new-roman; -fx-base: #abdee6;");
+        exitButton.setMinWidth(35);
+        exitButton.setMinHeight(20);
+        exitButton.setLayoutX(650);
+        exitButton.setLayoutY(506);
+        exitButton.setDisable(false);
 
         textField1.setText("Добро пожаловать!");
         textField1.setAlignment(Pos.CENTER);
