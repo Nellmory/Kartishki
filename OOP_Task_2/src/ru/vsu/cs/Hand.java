@@ -26,13 +26,23 @@ public class Hand extends Node {
     }
 
     public void remove(Card card) {
-        hand.remove(card);
+        for (int i = 0; i < this.getSize(); i++) {
+            Card card1 = this.getCard(i);
+            if (card1.getSuit() == card.getSuit() && card1.getValue() == card.getValue()) {
+                this.remove(i);
+                break;
+            }
+        }
     }
 
     public void remove(List<Card> cards) {
         for (Card card : cards) {
-            hand.remove(card);
+            this.remove(card);
         }
+    }
+
+    public void remove(int index) {
+        hand.remove(index);
     }
 
     public void clear() {
@@ -41,14 +51,10 @@ public class Hand extends Node {
 
     //runtime exception
     public Card getCard(int index) {
-        if (index <= hand.size()) {
+        if (index < hand.size()) {
             return hand.get(index);
         } else System.err.println("Выход за рамки массива!");
         return null;
-    }
-
-    public boolean contains(Card card) {
-        return this.contains(card);
     }
 
     public boolean containsSuit(Card.Suits suit) {
@@ -107,5 +113,15 @@ public class Hand extends Node {
     @Override
     public Node getStyleableNode() {
         return super.getStyleableNode();
+    }
+
+    public boolean ifContains(Card card) {
+        for (int i = 0; i < this.getSize(); i++) {
+            Card handCard = this.getCard(i);
+            if (handCard.getSuit() == card.getSuit() && handCard.getValue() == card.getValue()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

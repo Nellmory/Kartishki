@@ -216,7 +216,7 @@ public class PasiansController {
                         result();
                     } else {
                         focusedCard = null;
-                        editClue("Нарушены правила игры!", 220);
+                        clue.setVisible(false);
                     }
                     return;
                 }
@@ -258,7 +258,7 @@ public class PasiansController {
             result();
             return true;
         } else {
-            editClue("Нарушены правила игры!", 220);
+            clue.setVisible(false);
             return false;
         }
     }
@@ -366,7 +366,7 @@ public class PasiansController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            stage.setTitle("Card Games");
+            stage.setTitle("Win");
             stage.setScene(scene);
             stage.show();
         }

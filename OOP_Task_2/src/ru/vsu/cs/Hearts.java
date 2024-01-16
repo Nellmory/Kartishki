@@ -16,7 +16,6 @@ public class Hearts {
     private int round = 1;
     private int lastToTakeTrick = -1;
     private int userTurn = -1;
-    private int winner;
     private boolean isFirstTrick = true;
     private boolean isHeartsOpened = false;
     private boolean preparing = true;
@@ -29,13 +28,43 @@ public class Hearts {
         FINISHED
     }
 
-    private void calcState() {
+    public void calcState() {
+        if (trick.size() == 4) {
+            Card.Suits targetSuit = trick.get(0).getCard().getSuit();
+            int max = 0;
+            //найдем невезучего
+            for (UserTrick uT : trick) {
+                if (Objects.equals(uT.getCard().getSuit(), targetSuit) && uT.getCard().getValue() > max) {
+                    max = uT.getCard().getValue();
+                    lastToTakeTrick = uT.getUserHand();
+                }
+            }
+            //считаем, сколько ему баллов начислить
+            for (UserTrick uT : trick) {
+                if (Objects.equals(uT.getCard().getSuit(), Card.Suits.HEARTS)) {
+                    int scr = score.get(lastToTakeTrick) + 1;
+                    score.set(lastToTakeTrick, scr);
+                } else {
+                    if (Objects.equals(uT.getCard().getSuit(), Card.Suits.SPADES) && uT.getCard().getValue() == 12) {
+                        int scr = score.get(lastToTakeTrick) + 13;
+                        score.set(lastToTakeTrick, scr);
+                    }
+                }
+            }
+            turn();
+            trick.clear();
+        }
+        if (hands.get(0).getSize() == 0 &&
+                hands.get(1).getSize() == 0 &&
+                hands.get(2).getSize() == 0 &&
+                hands.get(3).getSize() == 0) {
+            newRound();
+        }
         for (int i = 0; i < 4; i++) {
             if (score.get(i) >= 100) {
                 int min = 200;
                 for (int j = 0; j < 4; j++) {
                     if (score.get(j) < min) {
-                        winner = j;
                         min = score.get(j);
                     }
                 }
@@ -43,45 +72,20 @@ public class Hearts {
                 break;
             }
         }
-        if (state == GameState.PLAYING) {
-            if (trick.size() == 4) {
-                Card.Suits targetSuit = trick.get(0).getCard().getSuit();
-                int max = 0;
-                //найдем невезучего
-                for (UserTrick uT : trick) {
-                    if (Objects.equals(uT.getCard().getSuit(), targetSuit) && uT.getCard().getValue() > max) {
-                        max = uT.getCard().getValue();
-                        lastToTakeTrick = uT.getUserHand();
-                    }
-                }
-                //считаем, сколько ему баллов начислить
-                for (UserTrick uT : trick) {
-                    if (Objects.equals(uT.getCard().getSuit(), Card.Suits.HEARTS)) {
-                        int scr = score.get(lastToTakeTrick) + 1;
-                        score.set(lastToTakeTrick, scr);
-                    } else {
-                        if (Objects.equals(uT.getCard().getSuit(), Card.Suits.SPADES) && uT.getCard().getValue() == 12) {
-                            int scr = score.get(lastToTakeTrick) + 13;
-                            score.set(lastToTakeTrick, scr);
-                        }
-                    }
-                }
-                turn();
-                trick.clear();
-            }
-            if (hands.get(0).getSize() == 0 &&
-                    hands.get(1).getSize() == 0 &&
-                    hands.get(2).getSize() == 0 &&
-                    hands.get(3).getSize() == 0) {
-                newRound();
-            }
-        }
     }
 
     public void newGame() {
+        //создадим руки
+        for (int i = 0; i < 4; i++) {
+            Hand hand = new Hand();
+            hands.add(hand);
+        }
         //раздадим карты
         dealCards();
         turn();
+        for (int i = 0; i < 4; i++) {
+            score.add(0);
+        }
         state = Hearts.GameState.PLAYING;
     }
 
@@ -95,6 +99,7 @@ public class Hearts {
         preparing = true;
         //раздадим карты
         dealCards();
+        turn();
     }
 
     private void dealCards() {
@@ -127,7 +132,7 @@ public class Hearts {
                     for (int i = 0; i < 4; i++) {
                         Hand hand = hands.get(i);
                         Card card = new Card(2, Card.Suits.CLUBS);
-                        if (hand.contains(card)) {
+                        if (hand.ifContains(card)) {
                             userTurn = i;
                         }
                     }
@@ -146,33 +151,33 @@ public class Hearts {
         Hand fourthH = hands.get(3);
         switch (round % 4) {
             case 1 -> {
-                firstH.remove(first);
+                //firstH.remove(first);
                 secondH.add(first);
-                secondH.remove(second);
+                //secondH.remove(second);
                 thirdH.add(second);
-                thirdH.remove(third);
+                //thirdH.remove(third);
                 fourthH.add(third);
-                fourthH.remove(fourth);
+                //fourthH.remove(fourth);
                 firstH.add(fourth);
             }
             case 2 -> {
-                firstH.remove(first);
+                //firstH.remove(first);
                 fourthH.add(first);
-                fourthH.remove(fourth);
+                //fourthH.remove(fourth);
                 thirdH.add(fourth);
-                thirdH.remove(third);
+                //thirdH.remove(third);
                 secondH.add(third);
-                secondH.remove(second);
+                //secondH.remove(second);
                 firstH.add(second);
             }
             case 3 -> {
-                firstH.remove(first);
+                //firstH.remove(first);
                 thirdH.add(first);
-                thirdH.remove(third);
+                //thirdH.remove(third);
                 firstH.add(third);
-                secondH.remove(second);
+                //secondH.remove(second);
                 fourthH.add(second);
-                fourthH.remove(fourth);
+                //fourthH.remove(fourth);
                 secondH.add(fourth);
             }
         }
@@ -186,7 +191,7 @@ public class Hearts {
         if (trick.isEmpty() && handIndex == userTurn) {
             //это первая взятка нового раунда?
             if (isFirstTrick) {
-                if (!Objects.equals(card, fCard)) {
+                if (card.getSuit() != fCard.getSuit() && card.getValue() != fCard.getValue()) {
                     return false;
                 } else {
                     isFirstTrick = false;
@@ -248,7 +253,23 @@ public class Hearts {
         }
     }
 
-    public int getWinner() {
-        return winner;
+    public List<Hand> getHands() {
+        return hands;
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public int getUserTurn() {
+        return userTurn;
+    }
+
+    public boolean isPreparing() {
+        return preparing;
+    }
+
+    public List<Integer> getScore() {
+        return score;
     }
 }

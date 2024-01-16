@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.vsu.cs.controllers.HeartsResultController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TextField fx:id="resultWindow"/>
+    <TextField fx:id="resultText"/>
+    <TextField fx:id="user1"/>
+    <TextField fx:id="user2"/>
+    <TextField fx:id="user3"/>
+    <TextField fx:id="user4"/>
+    <ImageView fx:id="first"/>
+    <ImageView fx:id="second"/>
+    <ImageView fx:id="third"/>
+    <ImageView fx:id="fourth"/>
+</AnchorPane>
