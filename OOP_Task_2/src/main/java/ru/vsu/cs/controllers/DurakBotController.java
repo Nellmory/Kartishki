@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +13,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import main.java.ru.vsu.cs.Main;
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.Hand;
-import main.java.ru.vsu.cs.tools.ImageReturn;
+import ru.vsu.cs.Main;
+import ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Hand;
+import ru.vsu.cs.tools.ImageReturn;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class DurakBotController {
     private boolean isTakeCards = false;
     private boolean end = false;
     private boolean newTurn = true;
-    private final main.java.ru.vsu.cs.Durak durak = new main.java.ru.vsu.cs.Durak();
+    private final ru.vsu.cs.Durak durak = new ru.vsu.cs.Durak();
     private Hand userHand;
     private Hand enemyHand;
 
@@ -65,7 +65,7 @@ public class DurakBotController {
         Card trumpCard = durak.getTrampCard();
 
         //подготовка сцены
-        anchorPane.setStyle("-fx-background-image: url('/main/java/images/durakTable.jpg')");
+        anchorPane.setStyle("-fx-background-image: url('images/durakTable.jpg')");
 
         //подготовка к игре
         prepareForGame(trumpCard);
@@ -129,7 +129,7 @@ public class DurakBotController {
         trumpCardImage.setLayoutX(41);
         trumpCardImage.setLayoutY(250);
 
-        gamingPack = new ImageView("/main/java/images/0.gif");
+        gamingPack = new ImageView("images/0.gif");
         gamingPack.setFitHeight(185);
         gamingPack.setFitWidth(125);
         anchorPane.getChildren().add(gamingPack);
@@ -137,7 +137,7 @@ public class DurakBotController {
         gamingPack.setLayoutY(250);
 
         //Бита
-        discardedCards = new ImageView("/main/java/images/0.gif");
+        discardedCards = new ImageView("images/0.gif");
         discardedCards.setFitHeight(185);
         discardedCards.setFitWidth(125);
         anchorPane.getChildren().add(discardedCards);
@@ -298,7 +298,7 @@ public class DurakBotController {
         if (newTurn) {
             isTakeCards = false;
         }
-        if (durak.getState() == main.java.ru.vsu.cs.Durak.GameState.PLAYING) {
+        if (durak.getState() == ru.vsu.cs.Durak.GameState.PLAYING) {
             if (newTurn) {
                 count = 0;
                 max = 6;
@@ -542,9 +542,9 @@ public class DurakBotController {
     }
 
     private void result() {
-        if (durak.getState() == main.java.ru.vsu.cs.Durak.GameState.WIN) {
+        if (durak.getState() == ru.vsu.cs.Durak.GameState.WIN) {
             Stage stage = (Stage) attack.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/win.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/win.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);
@@ -555,29 +555,29 @@ public class DurakBotController {
             stage.setScene(scene);
             stage.show();
         }
-        if (durak.getState() == main.java.ru.vsu.cs.Durak.GameState.DRAW) {
+        if (durak.getState() == ru.vsu.cs.Durak.GameState.DRAW) {
             Stage stage = (Stage) attack.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/draw.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/draw.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            stage.setTitle("Card Games");
+            stage.setTitle("Дурак");
             stage.setScene(scene);
             stage.show();
         }
-        if (durak.getState() == main.java.ru.vsu.cs.Durak.GameState.FAIL) {
+        if (durak.getState() == ru.vsu.cs.Durak.GameState.FAIL) {
             Stage stage = (Stage) attack.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/fail.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fail.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            stage.setTitle("Card Games");
+            stage.setTitle("Дурак");
             stage.setScene(scene);
             stage.show();
         }

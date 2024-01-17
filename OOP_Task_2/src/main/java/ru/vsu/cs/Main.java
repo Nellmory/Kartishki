@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs;
+package ru.vsu.cs;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -17,8 +17,8 @@ public class Main extends Application{
     @Override
     public void start(Stage stage) throws IOException {
         loader = new FXMLLoader();
-        //loader.setLocation(Main.class.getResource("/start.fxml"));
-        loader.setLocation(Main.class.getClassLoader().getResource("main/resources/start.fxml"));
+        loader.setLocation(Main.class.getResource("/start.fxml"));
+        //loader.setLocation(Main.class.getClassLoader().getResource("/start.fxml"));
         scene = new Scene(loader.load(), 800, 600);
         stage.setTitle("Card Games");
         stage.setScene(scene);

@@ -1,6 +1,6 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
-import main.java.ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Card;
 
 public class FocusedCard {
     private Card card;

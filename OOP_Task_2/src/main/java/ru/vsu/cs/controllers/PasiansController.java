@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,9 +12,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import main.java.ru.vsu.cs.Main;
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.ImageReturn;
+import ru.vsu.cs.Main;
+import ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.ImageReturn;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class PasiansController {
     private TextField clue;
     private int indexForGamingPack = -1;
     private int sizeOfGP;
-    private final main.java.ru.vsu.cs.Pasians pasians = new main.java.ru.vsu.cs.Pasians();
+    private final ru.vsu.cs.Pasians pasians = new ru.vsu.cs.Pasians();
     private FocusedCard focusedCard = null;
     private List<FocusedCard> focusedCards = null;
 
@@ -57,7 +57,7 @@ public class PasiansController {
         spaceForKeeping = pasians.getSpaceForKeeping();
 
         //подготовка сцены
-        anchorPane.setStyle("-fx-background-image: url('/main/java/images/pasiansTable.jpg')");
+        anchorPane.setStyle("-fx-background-image: url('images/pasiansTable.jpg')");
 
         //подготовка к игре
         prepareForGame();
@@ -95,7 +95,7 @@ public class PasiansController {
 
 
         //колода
-        gamingPack = new ImageView("/main/java/images/0.gif");
+        gamingPack = new ImageView("images/0.gif");
         gamingPack.setFitHeight(148);
         gamingPack.setFitWidth(100);
         anchorPane.getChildren().add(gamingPack);
@@ -115,7 +115,7 @@ public class PasiansController {
         endGame.setVisible(true);
         endGame.setOnMouseClicked(this::endGameButEvent);
 
-        repeatGP = new ImageView("/main/java/images/rep.png");
+        repeatGP = new ImageView("images/rep.png");
         repeatGP.setFitHeight(65);
         repeatGP.setFitWidth(65);
         anchorPane.getChildren().add(repeatGP);
@@ -155,7 +155,7 @@ public class PasiansController {
                 pad += 27;
             }
             if (content.isEmpty()) {
-                ImageView image = new ImageView("/main/java/images/keepingSpace.png");
+                ImageView image = new ImageView("images/keepingSpace.png");
                 image.setFitHeight(148);
                 image.setFitWidth(100);
                 image.setOnMouseClicked(this::mouseEvent);
@@ -171,7 +171,7 @@ public class PasiansController {
             //добавим дефолтную карту
             StackPane stackPane = keepingSpaceFX.get(i);
             stackPane.getChildren().clear();
-            ImageView base = new ImageView("/main/java/images/keepingSpace.png");
+            ImageView base = new ImageView("images/keepingSpace.png");
             base.setFitHeight(148);
             base.setFitWidth(100);
             base.setOnMouseClicked(this::KSMouseEvent);
@@ -291,7 +291,7 @@ public class PasiansController {
     }
 
     private void endGameButEvent(MouseEvent mouseEvent) {
-        pasians.setState(main.java.ru.vsu.cs.Pasians.GameState.FAIL);
+        pasians.setState(ru.vsu.cs.Pasians.GameState.FAIL);
         result();
     }
 
@@ -359,29 +359,29 @@ public class PasiansController {
 
     private void result() {
         pasians.calcState();
-        if (pasians.getState() == main.java.ru.vsu.cs.Pasians.GameState.WIN) {
+        if (pasians.getState() == ru.vsu.cs.Pasians.GameState.WIN) {
             Stage stage = (Stage) endGame.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/win.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/win.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            stage.setTitle("Win");
+            stage.setTitle("Пасьянс");
             stage.setScene(scene);
             stage.show();
         }
-        if (pasians.getState() == main.java.ru.vsu.cs.Pasians.GameState.FAIL) {
+        if (pasians.getState() == ru.vsu.cs.Pasians.GameState.FAIL) {
             Stage stage = (Stage) endGame.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/fail.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/fail.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            stage.setTitle("Fail");
+            stage.setTitle("Пасьянс");
             stage.setScene(scene);
             stage.show();
         }

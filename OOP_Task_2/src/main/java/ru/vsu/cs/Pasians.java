@@ -1,12 +1,12 @@
-package main.java.ru.vsu.cs;
+package ru.vsu.cs;
 
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.Pack;
+import ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Pack;
 
 import java.util.*;
 
-import static main.java.ru.vsu.cs.tools.Card.CardState.NOT_USED;
-import static main.java.ru.vsu.cs.tools.Card.CardState.USED;
+import static ru.vsu.cs.tools.Card.CardState.NOT_USED;
+import static ru.vsu.cs.tools.Card.CardState.USED;
 
 public class Pasians {
     private final Pack pack = new Pack(52);

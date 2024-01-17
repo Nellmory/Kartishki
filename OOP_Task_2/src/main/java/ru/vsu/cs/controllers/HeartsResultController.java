@@ -1,11 +1,11 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import main.java.ru.vsu.cs.Hearts;
+import ru.vsu.cs.Hearts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,8 @@ public class HeartsResultController {
     public TextField user3Score = new TextField();
     public TextField user4Score = new TextField();
 
-    private final main.java.ru.vsu.cs.controllers.HeartsController heartsController = new main.java.ru.vsu.cs.controllers.HeartsController();
-    private List<TextField> userScoreListFX = new ArrayList<>();
+    private final ru.vsu.cs.controllers.HeartsController heartsController = new ru.vsu.cs.controllers.HeartsController();
+    private final List<TextField> userScoreListFX = new ArrayList<>();
     private List<Integer> userScoreList;
 
     @FXML
@@ -206,28 +206,28 @@ public class HeartsResultController {
         userScoreListFX.add(user4Score);
 
         //значки мест
-        first = new ImageView("/main/java/images/heartsResult/crown1.png");
+        first = new ImageView("images/heartsResult/crown1.png");
         anchorPane.getChildren().add(first);
         first.setFitHeight(100);
         first.setFitWidth(100);
         first.setLayoutX(237);
         first.setLayoutY(138);
 
-        second = new ImageView("/main/java/images/heartsResult/crown2.png");
+        second = new ImageView("images/heartsResult/crown2.png");
         anchorPane.getChildren().add(second);
         second.setFitHeight(100);
         second.setFitWidth(100);
         second.setLayoutX(237);
         second.setLayoutY(260);
 
-        third = new ImageView("/main/java/images/heartsResult/crown3.png");
+        third = new ImageView("images/heartsResult/crown3.png");
         anchorPane.getChildren().add(third);
         third.setFitHeight(100);
         third.setFitWidth(100);
         third.setLayoutX(237);
         third.setLayoutY(382);
 
-        third = new ImageView("/main/java/images/heartsResult/dead.png");
+        third = new ImageView("images/heartsResult/dead.png");
         anchorPane.getChildren().add(third);
         third.setFitHeight(90);
         third.setFitWidth(90);

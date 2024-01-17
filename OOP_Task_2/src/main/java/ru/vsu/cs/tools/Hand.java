@@ -1,8 +1,8 @@
-package main.java.ru.vsu.cs.tools;
+package ru.vsu.cs.tools;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import main.java.ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Card;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,10 +29,10 @@ public class Hand extends Node {
     }
 
     public void remove(Card card) {
-        for (int i = 0; i < this.getSize(); i++) {
-            Card card1 = this.getCard(i);
+        for (int i = 0; i < getSize(); i++) {
+            Card card1 = getCard(i);
             if (card1.getSuit() == card.getSuit() && card1.getValue() == card.getValue()) {
-                this.remove(i);
+                remove(i);
                 break;
             }
         }
@@ -40,7 +40,7 @@ public class Hand extends Node {
 
     public void remove(List<Card> cards) {
         for (Card card : cards) {
-            this.remove(card);
+            remove(card);
         }
     }
 

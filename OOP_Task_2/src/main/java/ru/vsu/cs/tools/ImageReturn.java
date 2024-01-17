@@ -1,8 +1,7 @@
-package main.java.ru.vsu.cs.tools;
+package ru.vsu.cs.tools;
 
 import javafx.scene.image.Image;
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Card;
 
 public class ImageReturn {
 
@@ -10,10 +9,10 @@ public class ImageReturn {
 
     public static Image getImage(Card card) {
         if (card.getFaceState() == Card.CardFaceState.FACE_DOWN) {
-            return new Image("/main/java/images/0.gif");
+            return new Image("images/0.gif");
         } else {
             StringBuilder path = new StringBuilder();
-            path.append("/main/java/images/");
+            path.append("images/");
             switch (card.getSuit()) {
                 case CLUBS -> {
                     path.append("clubs/0");

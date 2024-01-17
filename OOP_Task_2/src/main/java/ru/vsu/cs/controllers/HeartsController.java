@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,10 +12,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import main.java.ru.vsu.cs.Main;
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.Hand;
-import main.java.ru.vsu.cs.tools.ImageReturn;
+import ru.vsu.cs.Main;
+import ru.vsu.cs.controllers.durakConstans.DurakConstans;
+import ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Hand;
+import ru.vsu.cs.tools.ImageReturn;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class HeartsController {
     private int turn;
     private boolean prepare = true;
     private int paddingSS = 0;
-    private final main.java.ru.vsu.cs.Hearts hearts = new main.java.ru.vsu.cs.Hearts();
+    private final ru.vsu.cs.Hearts hearts = new ru.vsu.cs.Hearts();
     private List<Hand> hands = new ArrayList<>(4);
     private final List<StackPane> handsFX = new ArrayList<>(4);
     private final List<StackPane> selectSpaces = new ArrayList<>(4);
@@ -57,7 +58,7 @@ public class HeartsController {
         prepare = hearts.isPreparing();
 
         //подготовка сцены
-        anchorPane.setStyle("-fx-background-image: url('/main/java/images/heartsTable.jpg')");
+        anchorPane.setStyle("-fx-background-image: url('images/heartsTable.jpg')");
 
         //подготовка к игре
         prepareForGame();
@@ -100,7 +101,7 @@ public class HeartsController {
         anchorPane.getChildren().add(clue);
         clue.setMinHeight(60);
         clue.setMinWidth(375);
-        clue.setLayoutX(263);
+        clue.setLayoutX(DurakConstans.LayoutX);
         clue.setLayoutY(320);
         clue.setEditable(false);
         clue.setDisable(false);
@@ -361,10 +362,10 @@ public class HeartsController {
     }
 
     private void result() {
-        if (hearts.getState() == main.java.ru.vsu.cs.Hearts.GameState.FINISHED) {
+        if (hearts.getState() == ru.vsu.cs.Hearts.GameState.FINISHED) {
             score = hearts.getScore();
             Stage stage = (Stage) handsFX.get(0).getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getClassLoader().getResource("main/resources/heartsResult.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/heartsResult.fxml"));
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 900, 700);

@@ -1,17 +1,17 @@
-package main.java.ru.vsu.cs;
+package ru.vsu.cs;
 
-import main.java.ru.vsu.cs.tools.Card;
-import main.java.ru.vsu.cs.tools.Hand;
-import main.java.ru.vsu.cs.tools.Pack;
-import main.java.ru.vsu.cs.tools.UserTrick;
+import ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Hand;
+import ru.vsu.cs.tools.Pack;
+import ru.vsu.cs.tools.UserTrick;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static main.java.ru.vsu.cs.tools.Card.CardState.NOT_USED;
-import static main.java.ru.vsu.cs.tools.Card.CardState.USED;
+import static ru.vsu.cs.tools.Card.CardState.NOT_USED;
+import static ru.vsu.cs.tools.Card.CardState.USED;
 
 public class Hearts {
     private Pack pack = new Pack(52);

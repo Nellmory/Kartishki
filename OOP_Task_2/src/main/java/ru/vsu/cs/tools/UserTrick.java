@@ -1,6 +1,6 @@
-package main.java.ru.vsu.cs.tools;
+package ru.vsu.cs.tools;
 
-import main.java.ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Card;
 
 public class UserTrick {
     private int userHand;

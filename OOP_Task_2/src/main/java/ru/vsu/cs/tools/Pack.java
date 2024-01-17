@@ -1,6 +1,6 @@
-package main.java.ru.vsu.cs.tools;
+package ru.vsu.cs.tools;
 
-import main.java.ru.vsu.cs.tools.Card;
+import ru.vsu.cs.tools.Card;
 
 import java.util.ArrayList;
 import java.util.List;

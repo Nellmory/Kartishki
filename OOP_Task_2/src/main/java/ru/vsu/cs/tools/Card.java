@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs.tools;
+package ru.vsu.cs.tools;
 
 
 public class Card {

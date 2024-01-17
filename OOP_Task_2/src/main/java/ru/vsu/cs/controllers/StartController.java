@@ -1,4 +1,4 @@
-package main.java.ru.vsu.cs.controllers;
+package ru.vsu.cs.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import main.java.ru.vsu.cs.Main;
 
 import java.io.IOException;
 
@@ -33,7 +32,7 @@ public class StartController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) durakButton.getScene().getWindow();
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/durak.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/durak.fxml"));
                 Scene scene = null;
                 try {
                     scene = new Scene(fxmlLoader.load(), 900, 700);
@@ -50,7 +49,7 @@ public class StartController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) pasiansButton.getScene().getWindow();
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/pasians.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/pasians.fxml"));
                 Scene scene = null;
                 try {
                     scene = new Scene(fxmlLoader.load(), 900, 700);
@@ -67,7 +66,7 @@ public class StartController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Stage stage = (Stage) heartsButton.getScene().getWindow();
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/main/resources/hearts.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/hearts.fxml"));
                 Scene scene = null;
                 try {
                     scene = new Scene(fxmlLoader.load(), 900, 700);
